@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "b2122553-7428-4c4c-bb33-f6b6eceb56a0",
+		"name": "RestfulAPI Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47089846"
+	},
+	"item": [
+		{
+			"name": "Post Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"const products = [\r",
+							"  \"Wireless Mouse Pro\",\r",
+							"  \"Stainless Travel Mug\",\r",
+							"  \"Noise-cancelling Headphones\",\r",
+							"  \"Organic Green Tea Pack\",\r",
+							"  \"LED Desk Lamp\",\r",
+							"  \"Portable Power Bank 10000mAh\",\r",
+							"  \"Smart Fitness Band\",\r",
+							"];\r",
+							"const name = products[Math.floor(Math.random() * products.length)];\r",
+							"const price = Math.floor(Math.random() * (12999 - 799 + 1)) + 799;\r",
+							"const categories = [\"Office\", \"Electronics\", \"Kitchen\", \"Health\"];\r",
+							"const category = categories[Math.floor(Math.random() * categories.length)];\r",
+							"\r",
+							"const id = Number(String(Date.now()).slice(-6));\r",
+							"\r",
+							"pm.environment.set(\"productName\", name);\r",
+							"pm.environment.set(\"productPrice\", price);\r",
+							"pm.environment.set(\"productCategory\", category);\r",
+							"pm.environment.set(\"clientGeneratedId\", id); "
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 or 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"// parse JSON\r",
+							"let json = {};\r",
+							"try {\r",
+							"    json = pm.response.json();\r",
+							"} catch (e) {\r",
+							"    console.log(\"Response is not JSON:\", e);\r",
+							"}\r",
+							"\r",
+							"// log values to console (visible in Postman Console)\r",
+							"console.log(\"Create response:\", json);\r",
+							"\r",
+							"// if server returns id, chain it. prefer server id, else use clientGeneratedId\r",
+							"const returnedId = json.id || pm.environment.get(\"clientGeneratedId\");\r",
+							"if (returnedId) {\r",
+							"    pm.environment.set(\"createdId\", returnedId);\r",
+							"    pm.test(\"createdId saved to environment\", function () {\r",
+							"        pm.expect(pm.environment.get(\"createdId\")).to.not.be.undefined;\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Chai assertions (realistic checks)\r",
+							"pm.test(\"Response has name and price\", function () {\r",
+							"    pm.expect(json).to.have.property(\"name\");\r",
+							"    pm.expect(json).to.have.property(\"price\");\r",
+							"    pm.expect(json.price).to.be.a(\"number\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{clientGeneratedId}},\r\n  \"name\": \"{{productName}}\",\r\n  \"data\": {\r\n  \"price\": {{productPrice}},\r\n  \"category\": \"{{productCategory}}\",\r\n  \"stock\": 50,\r\n  \"description\": \"High-quality, hand-picked product suitable for daily use.\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/objects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"objects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Put Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Patch Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "POST Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
